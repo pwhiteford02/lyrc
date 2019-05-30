@@ -1,5 +1,3 @@
-
-
 const DATA_HANDLER = require('./node/DataHandler');
 
 class app {
@@ -10,10 +8,11 @@ class app {
     }
 
     loadServer() {
-        const HTTP = require('http');
-        const HTTP2 = require('http2');
         const EJS = require('ejs');
-        const PORT = process.env.PORT || 443;
+        // const HTTPS = require('https');
+        const HTTP = require('http');
+        // const PORT = process.env.PORT || 443;
+        const PORT = process.env.PORT || 8111;
         const SSL_OPTIONS = {
             key: DATA_HANDLER.getKey(),
             cert: DATA_HANDLER.getCert(),
@@ -21,16 +20,8 @@ class app {
             rejectUnauthorized: false
         };
 
-        HTTP.createServer((request, response) => {
-            response.writeHead(301, {
-                'Location': `https://${request.headers['host']}${request.url}`
-            });
-            response.end();
-        }).listen(80);
-
-
-        HTTP2.createSecureServer(SSL_OPTIONS, async (request, response) => {
-        // HTTP.createServer(async (request, response) => {
+        // HTTPS.createServer(SSL_OPTIONS, async (request, response) => {
+        HTTP.createServer(async (request, response) => {
 
             let httpHandler = (error, string, contentType) => {
                 if (error) {
